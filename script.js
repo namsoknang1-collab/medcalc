@@ -1,14 +1,14 @@
-// 1. TOOL SWITCHING LOGIC
+/* --- [1] TOOL SWITCHING LOGIC --- */
 function showTool(toolName) {
     // Hide all tool cards
     document.getElementById('tool-bmi').style.display = 'none';
     document.getElementById('tool-gfr').style.display = 'none';
 
-    // Reset Navigation Styles
+    // Reset Navigation Classes
     document.getElementById('nav-bmi').classList.remove('active');
     document.getElementById('nav-gfr').classList.remove('active');
 
-    // Show the selected one
+    // Show the active tool
     if(toolName === 'bmi') {
         document.getElementById('tool-bmi').style.display = 'block';
         document.getElementById('nav-bmi').classList.add('active');
@@ -17,28 +17,43 @@ function showTool(toolName) {
         document.getElementById('nav-gfr').classList.add('active');
     }
 
-    // Refresh Icons
+    // Refresh icons for new elements
     lucide.createIcons();
+
+    // Close sidebar on mobile after clicking
+    if (window.innerWidth <= 768) {
+        toggleSidebar();
+    }
 }
 
-// 2. SIDEBAR TOGGLE
+/* --- [2] SIDEBAR TOGGLE LOGIC --- */
 function toggleSidebar() {
     const sidebar = document.getElementById('mainSidebar');
     const mainContent = document.getElementById('mainContent');
+    const overlay = document.getElementById('sidebarOverlay');
     const toggleIcon = document.getElementById('toggleIcon');
 
-    sidebar.classList.toggle('collapsed');
-    mainContent.classList.toggle('expanded');
+    if (window.innerWidth > 768) {
+        // Desktop: Toggle collapsed state
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
 
-    if (sidebar.classList.contains('collapsed')) {
-        toggleIcon.setAttribute('data-lucide', 'chevron-right');
+        // Update Arrow Icon
+        if (sidebar.classList.contains('collapsed')) {
+            toggleIcon.setAttribute('data-lucide', 'chevron-right');
+        } else {
+            toggleIcon.setAttribute('data-lucide', 'chevron-left');
+        }
     } else {
-        toggleIcon.setAttribute('data-lucide', 'chevron-left');
+        // Mobile: Toggle active slide-in state
+        sidebar.classList.toggle('active');
+        overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
     }
+
     lucide.createIcons();
 }
 
-// 3. BMI CALCULATION
+/* --- [3] BMI CALCULATION --- */
 function calculateBMI() {
     const weight = parseFloat(document.getElementById('weight').value);
     const heightCm = parseFloat(document.getElementById('height').value);
@@ -57,7 +72,7 @@ function calculateBMI() {
 
         if (bmi < 18.5) {
             category.innerText = "Underweight"; color = "#f59e0b";
-            position = (bmi / 18.5) * 20;
+            position = Math.max((bmi / 18.5) * 25, 5);
         } else if (bmi <= 24.9) {
             category.innerText = "Normal"; color = "#10b981";
             position = 30 + ((bmi - 18.5) / 6.4) * 20;
@@ -66,7 +81,7 @@ function calculateBMI() {
             position = 55 + ((bmi - 25) / 4.9) * 20;
         } else {
             category.innerText = "Obese"; color = "#ef4444";
-            position = 80 + Math.min(((bmi - 30) / 10) * 20, 15);
+            position = 80 + Math.min(((bmi - 30) / 10) * 15, 15);
         }
 
         category.style.backgroundColor = color + "20";
@@ -74,11 +89,11 @@ function calculateBMI() {
         pointer.style.left = position + "%";
         pointer.style.backgroundColor = color;
     } else {
-        alert("Enter valid numbers.");
+        alert("Please enter valid weight and height.");
     }
 }
 
-// 4. GFR CALCULATION (CKD-EPI 2021)
+/* --- [4] GFR CALCULATION (CKD-EPI 2021) --- */
 function calculateGFR() {
     const scr = parseFloat(document.getElementById('creatinine').value);
     const age = parseFloat(document.getElementById('age').value);
@@ -101,37 +116,28 @@ function calculateGFR() {
         else if (gfr >= 30) { stage.innerText = "G3: Moderate"; stage.style.color = "#f97316"; }
         else { stage.innerText = "G4/5: Severe/Failure"; stage.style.color = "red"; }
     } else {
-        alert("Enter valid lab values.");
+        alert("Please enter valid laboratory values.");
     }
 }
+
+/* --- [5] SEARCH & FILTER LOGIC --- */
 function filterTools() {
     const input = document.getElementById('toolSearch');
     const filter = input.value.toLowerCase();
     const links = document.querySelectorAll('.sidebar-nav a');
-    const clearBtn = document.querySelector('.search-clear');
+    const clearBtn = document.getElementById('searchClear');
 
-    // Show/Hide Clear Button
-    if (filter.length > 0) {
-        clearBtn.style.display = "block";
-    } else {
-        clearBtn.style.display = "none";
-    }
+    clearBtn.style.display = filter.length > 0 ? "block" : "none";
 
-    // Filter Logic
     links.forEach(link => {
         const text = link.innerText.toLowerCase();
-        // We find the parent label to hide that too if empty
-        if (text.includes(filter)) {
-            link.style.display = "flex";
-        } else {
-            link.style.display = "none";
-        }
+        link.style.display = text.includes(filter) ? "flex" : "none";
     });
 }
 
 function clearSearch() {
     const input = document.getElementById('toolSearch');
     input.value = "";
-    filterTools(); // Reset the list
+    filterTools();
     input.focus();
 }
