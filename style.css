@@ -134,21 +134,46 @@ body {
     width: 4px; height: 20px; background: #0f172a; position: absolute; top: -4px; border-radius: 2px; transition: left 0.5s;
 }
 
-/* --- [8] MOBILE RESPONSIVE --- */
-.menu-toggle-mobile {
-    display: none; position: fixed; top: 20px; left: 20px; z-index: 2100;
-    background: var(--medical-blue); color: white; border: none; padding: 10px; border-radius: 12px;
-}
-
+/* --- UPDATE TO MOBILE OVERRIDES --- */
 @media (max-width: 768px) {
-    .menu-toggle-mobile { display: block; }
-    .sidebar { left: -320px; top: 0; bottom: 0; height: 100vh; border-radius: 0; width: 280px; left: -320px; }
-    .sidebar.active { left: 0; }
-    .main-content { margin-left: 0; padding: 80px 15px; }
-    .calc-grid { grid-template-columns: 1fr; }
-    #sidebarOverlay {
-        display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.5); z-index: 1500;
+    /* [1] Ensure the main content takes up the WHOLE screen width */
+    .main-content {
+        margin-left: 0 !important; /* Force remove the 310px desktop margin */
+        padding: 80px 15px 40px 15px;
+        width: 100%;
+        display: block; /* Ensures standard flow */
+        box-sizing: border-box;
+    }
+
+    /* [2] Force the tool container to center its children */
+    .tool-container {
+        display: flex;
+        justify-content: center; /* Centers horizontally */
+        align-items: flex-start;
+        width: 100%;
+        margin: 0;
+    }
+
+    /* [3] Ensure the card itself doesn't have any left-leaning margins */
+    .tool-card {
+        width: 100%;
+        max-width: 450px; /* Limits width so it doesn't touch screen edges */
+        margin: 0 auto !important; /* Forces equal margins on left and right */
+        padding: 25px 20px;
+        box-sizing: border-box;
+    }
+
+    /* [4] Fix the Sidebar so it doesn't push the screen */
+    .sidebar {
+        position: fixed;
+        left: -320px;
+        /* Ensure it's totally removed from the flow until 'active' */
+        visibility: hidden;
+    }
+
+    .sidebar.active {
+        visibility: visible;
+        left: 0;
     }
 }
 
