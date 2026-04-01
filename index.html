@@ -2,12 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MedCalc - Professional Medical Suite</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <button class="menu-toggle-mobile" onclick="toggleSidebar()">
+        <i data-lucide="menu"></i>
+    </button>
 
     <aside class="sidebar" id="mainSidebar">
         <div class="sidebar-header">
@@ -15,8 +19,8 @@
                 <i data-lucide="activity" class="logo-icon"></i>
                 <span class="logo-text">Med<span>Calc</span></span>
             </div>
-            <button class="menu-toggle-mobile" onclick="toggleSidebar()">
-                <i data-lucide="menu"></i>
+            <button class="inner-toggle" onclick="toggleSidebar()">
+                <i data-lucide="chevron-left" id="toggleIcon"></i>
             </button>
         </div>
 
@@ -24,9 +28,10 @@
             <div class="search-inner">
                 <i data-lucide="search" class="search-icon"></i>
                 <input type="text" id="toolSearch" placeholder="Search tools..." onkeyup="filterTools()">
-                <i data-lucide="x" class="search-clear" onclick="clearSearch()"></i>
+                <i data-lucide="x" class="search-clear" id="searchClear" onclick="clearSearch()"></i>
             </div>
-          </div>
+        </div>
+
         <nav class="sidebar-nav">
             <p class="nav-label">General</p>
             <a href="javascript:void(0)" onclick="showTool('bmi')" id="nav-bmi" class="active">
@@ -41,7 +46,6 @@
     </aside>
 
     <main class="main-content" id="mainContent">
-
         <section class="tool-container">
 
             <div class="tool-card" id="tool-bmi">
@@ -137,14 +141,14 @@
 
                 <div class="input-group">
                     <label>Biological Sex</label>
-                    <select id="sex" class="modern-input" style="width: 100%; border: 2px solid #e2e8f0; height: 55px; border-radius: 16px; padding: 0 15px; font-weight: bold;">
+                    <select id="sex" class="modern-input-select">
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                     </select>
                 </div>
 
                 <div class="button-area">
-                    <button onclick="calculateGFR()" class="btn-calc" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
+                    <button onclick="calculateGFR()" class="btn-calc btn-gfr">
                         <i data-lucide="activity"></i> Estimate GFR
                     </button>
                 </div>
@@ -159,6 +163,8 @@
 
         </section>
     </main>
+
+    <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
     <script src="script.js"></script>
     <script>lucide.createIcons();</script>
