@@ -1,4 +1,4 @@
-/* --- 1. CORE VARIABLES & THEME --- */
+/* --- [1] CORE THEME & VARIABLES --- */
 :root {
     --sidebar-bg: #0f172a;
     --medical-blue: #38bdf8;
@@ -14,9 +14,10 @@ body {
     background-color: var(--bg-light);
     display: flex;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* --- 2. SIDEBAR (GEMINI STYLE) --- */
+/* --- [2] SIDEBAR STYLING --- */
 .sidebar {
     width: 280px;
     background: var(--sidebar-bg);
@@ -25,21 +26,20 @@ body {
     left: 15px; top: 15px; bottom: 15px;
     border-radius: 24px;
     transition: var(--transition);
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     padding: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    z-index: 1000;
+    z-index: 2000;
 }
 
+/* Collapsed Desktop Sidebar */
 .sidebar.collapsed { width: 80px; padding: 20px 10px; }
-
 .sidebar.collapsed .logo-text,
 .sidebar.collapsed .nav-text,
 .sidebar.collapsed .nav-label,
-.sidebar.collapsed .dr-tag,
-.sidebar.collapsed input { display: none; }
+.sidebar.collapsed .search-inner input,
+.sidebar.collapsed .search-clear { display: none; }
 
 .sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
 .logo-area { display: flex; align-items: center; gap: 12px; }
@@ -47,6 +47,12 @@ body {
 .logo-text { font-size: 1.4rem; font-weight: bold; }
 .logo-text span { color: var(--medical-blue); }
 
+.inner-toggle {
+    background: #1e293b; border: none; color: var(--medical-blue);
+    cursor: pointer; padding: 5px; border-radius: 8px; display: flex;
+}
+
+/* --- [3] SIDEBAR NAVIGATION --- */
 .sidebar-nav a {
     display: flex; align-items: center; color: #cbd5e1;
     text-decoration: none; padding: 12px; margin-bottom: 5px;
@@ -55,253 +61,97 @@ body {
 .sidebar-nav a i { min-width: 24px; margin-right: 15px; }
 .sidebar.collapsed .sidebar-nav a { justify-content: center; }
 .sidebar.collapsed .sidebar-nav a i { margin-right: 0; }
-
 .sidebar-nav a:hover, .sidebar-nav a.active {
-    background: #1e293b;
-    color: var(--medical-blue);
+    background: #1e293b; color: var(--medical-blue);
 }
+.nav-label { font-size: 0.7rem; text-transform: uppercase; color: #64748b; margin: 20px 0 10px 10px; font-weight: bold; }
 
-/* --- 3. MAIN CONTENT LAYOUT --- */
+/* --- [4] SEARCH BAR --- */
+.search-inner {
+    position: relative; display: flex; align-items: center;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px; padding: 10px 14px; margin-bottom: 20px;
+}
+.search-inner input {
+    background: transparent; border: none; color: white; width: 100%; outline: none; margin-left: 10px;
+}
+.search-clear { cursor: pointer; color: var(--text-slate); display: none; }
+
+/* --- [5] MAIN CONTENT & CARDS --- */
 .main-content {
-    margin-left: 310px;
-    transition: var(--transition);
-    padding: 40px;
-    width: 100%;
+    margin-left: 320px; transition: var(--transition);
+    padding: 40px; width: 100%;
 }
-
 .main-content.expanded { margin-left: 110px; }
 
-.tool-container {
-    display: flex;
-    justify-content: center;
-    padding: 20px 0;
-}
-
 .tool-card {
-    background: var(--white);
-    width: 100%;
-    max-width: 500px;
-    padding: 35px;
-    border-radius: 28px;
+    background: var(--white); width: 100%; max-width: 500px;
+    padding: 35px; border-radius: 28px; margin: 0 auto;
     box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    animation: fadeIn 0.4s ease-out;
 }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
 
-/* --- 4. INPUTS --- */
-.calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+.card-header { display: flex; gap: 15px; margin-bottom: 25px; }
+.card-icon { width: 40px; height: 40px; color: var(--medical-blue); }
 
+/* --- [6] INPUTS & BUTTONS --- */
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
 .modern-input {
-    display: flex; align-items: center;
-    background: #f8fafc;
-    border: 2px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 0 15px;
-    transition: 0.3s;
+    display: flex; align-items: center; background: #f8fafc;
+    border: 2px solid #e2e8f0; border-radius: 16px; padding: 0 15px;
 }
-
-.modern-input:focus-within {
-    border-color: var(--medical-blue);
-    background: #ffffff;
-    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
-}
-
 .modern-input input {
-    height: 55px; border: none; background: transparent;
-    font-size: 1.2rem; font-weight: bold; width: 100%; outline: none;
+    height: 55px; border: none; background: transparent; width: 100%; font-weight: bold; outline: none;
+}
+.modern-input-select {
+    width: 100%; border: 2px solid #e2e8f0; height: 55px; border-radius: 16px; padding: 0 15px; font-weight: bold; background: #f8fafc;
 }
 
-.input-icon { color: var(--text-slate); margin-right: 10px; width: 20px; }
-.unit-badge { font-size: 0.75rem; font-weight: 800; color: var(--text-slate); background: #f1f5f9; padding: 4px 8px; border-radius: 8px; }
+.button-area { display: flex; justify-content: center; margin: 30px 0; }
+.btn-calc {
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    color: white; border: none; border-radius: 16px; padding: 16px 32px;
+    font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px;
+    transition: transform 0.2s; width: 100%; justify-content: center;
+}
+.btn-calc:hover { transform: translateY(-3px); }
+.btn-gfr { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
 
-/* --- 5. RESULT & GAUGE --- */
+/* --- [7] RESULTS & GAUGE --- */
 .result-box {
     margin-top: 30px; padding: 25px; border-radius: 24px;
     background: #f8fafc; border: 1px solid #e2e8f0; text-align: center;
-    display: none;
 }
-
-#bmi-value { font-size: 3.5rem; margin: 10px 0; color: var(--sidebar-bg); letter-spacing: -2px; }
-
-.status-badge {
-    display: inline-block; padding: 8px 20px; border-radius: 50px;
-    font-weight: 800; font-size: 0.85rem; text-transform: uppercase;
-}
+#bmi-value { font-size: 3.5rem; margin: 10px 0; letter-spacing: -2px; }
+.status-badge { display: inline-block; padding: 8px 20px; border-radius: 50px; font-weight: 800; font-size: 0.85rem; }
 
 .gauge-track {
-    height: 12px; border-radius: 10px; margin: 20px 0;
+    height: 12px; border-radius: 10px; margin: 20px 0; position: relative;
     background: linear-gradient(to right, #f59e0b 0%, #10b981 30%, #10b981 50%, #f97316 75%, #ef4444 100%);
-    position: relative;
 }
-
 .gauge-pointer {
-    width: 4px; height: 20px; background: #0f172a;
-    position: absolute; top: -4px; left: 50%;
-    border-radius: 2px; transition: left 0.5s ease;
+    width: 4px; height: 20px; background: #0f172a; position: absolute; top: -4px; border-radius: 2px; transition: left 0.5s;
 }
 
-/* --- 6. BEAUTIFUL BUTTON STYLE --- */
-.button-area {
-    display: flex;
-    justify-content: center;
-    margin: 30px 0;
+/* --- [8] MOBILE RESPONSIVE --- */
+.menu-toggle-mobile {
+    display: none; position: fixed; top: 20px; left: 20px; z-index: 2100;
+    background: var(--medical-blue); color: white; border: none; padding: 10px; border-radius: 12px;
 }
 
-.btn-calc {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
-    color: white;
-    padding: 16px 32px;
-    width: 100%;
-    max-width: 320px;
-    border: none;
-    border-radius: 16px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 10px 20px -5px rgba(2, 132, 199, 0.4);
-}
-
-.btn-calc:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 15px 25px -5px rgba(2, 132, 199, 0.5);
-    filter: brightness(1.1);
-}
-
-.btn-calc:active {
-    transform: translateY(0);
-}
-
-.btn-calc i {
-    width: 20px;
-    height: 20px;
-    transition: transform 0.3s ease;
-}
-
-.btn-calc:hover i {
-    transform: rotate(15deg) scale(1.2);
-}
-
-/* --- 7. MOBILE OVERRIDES (IMPORTANT: MUST BE AT BOTTOM) --- */
 @media (max-width: 768px) {
-    .sidebar { left: -320px; }
-    .sidebar.active { left: 15px; width: calc(100% - 30px); }
-
-    .main-content { margin-left: 0; padding: 15px; padding-top: 80px; }
-
+    .menu-toggle-mobile { display: block; }
+    .sidebar { left: -320px; top: 0; bottom: 0; height: 100vh; border-radius: 0; width: 280px; left: -320px; }
+    .sidebar.active { left: 0; }
+    .main-content { margin-left: 0; padding: 80px 15px; }
     .calc-grid { grid-template-columns: 1fr; }
-
-    .tool-card { padding: 20px; }
-    #bmi-value { font-size: 2.8rem; }
-
-    /* Centered Mobile Button Adjustment */
-    .btn-calc {
-        padding: 20px;
-        font-size: 1.1rem;
-        max-width: 100%; /* Allows button to be wider on small screens */
+    #sidebarOverlay {
+        display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); z-index: 1500;
     }
 }
 
-/* Reference Table Styling */
 .reference-table { margin-top: 30px; border-top: 1px solid #f1f5f9; padding-top: 20px; }
 .ref-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.85rem; color: #64748b; }
 .active-green { color: #10b981; font-weight: bold; }
-/* Transitions for switching tools */
-.tool-card {
-    animation: fadeIn 0.4s ease-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Custom dropdown style */
-select.modern-input {
-    appearance: none;
-    cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-}
-/* --- BEAUTIFUL SEARCH BOX --- */
-.search-container {
-    padding: 0 10px; /* Spacing from sidebar edges */
-    margin-bottom: 20px;
-    transition: var(--transition);
-}
-
-.search-inner {
-    position: relative;
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.05); /* Very subtle transparent white */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 10px 14px;
-    transition: all 0.3s ease;
-}
-
-/* Icon Styling */
-.search-icon {
-    width: 18px;
-    height: 18px;
-    color: var(--text-slate);
-    transition: color 0.3s ease;
-    flex-shrink: 0;
-}
-
-/* Input Styling */
-.search-inner input {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 0.9rem;
-    margin-left: 10px;
-    width: 100%;
-    outline: none;
-}
-
-.search-inner input::placeholder {
-    color: #64748b;
-}
-
-/* Focus Effect (The Glow) */
-.search-inner:focus-within {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--medical-blue);
-    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
-}
-
-.search-inner:focus-within .search-icon {
-    color: var(--medical-blue);
-}
-
-/* Clear Button Styling */
-.search-clear {
-    width: 14px;
-    height: 14px;
-    color: #64748b;
-    cursor: pointer;
-    display: none; /* Hidden by default */
-}
-
-/* Handle Collapsed Sidebar Search */
-.sidebar.collapsed .search-container {
-    padding: 0;
-    justify-content: center;
-}
-
-.sidebar.collapsed .search-inner {
-    border: none;
-    background: transparent;
-    justify-content: center;
-}
-
-.sidebar.collapsed .search-inner input,
-.sidebar.collapsed .search-clear {
-    display: none;
-}
