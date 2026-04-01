@@ -1,0 +1,307 @@
+/* --- 1. CORE VARIABLES & THEME --- */
+:root {
+    --sidebar-bg: #0f172a;
+    --medical-blue: #38bdf8;
+    --white: #ffffff;
+    --text-slate: #94a3b8;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --bg-light: #f1f5f9;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-light);
+    display: flex;
+    min-height: 100vh;
+}
+
+/* --- 2. SIDEBAR (GEMINI STYLE) --- */
+.sidebar {
+    width: 280px;
+    background: var(--sidebar-bg);
+    color: white;
+    position: fixed;
+    left: 15px; top: 15px; bottom: 15px;
+    border-radius: 24px;
+    transition: var(--transition);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.sidebar.collapsed { width: 80px; padding: 20px 10px; }
+
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .nav-text,
+.sidebar.collapsed .nav-label,
+.sidebar.collapsed .dr-tag,
+.sidebar.collapsed input { display: none; }
+
+.sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.logo-area { display: flex; align-items: center; gap: 12px; }
+.logo-icon { color: var(--medical-blue); min-width: 28px; }
+.logo-text { font-size: 1.4rem; font-weight: bold; }
+.logo-text span { color: var(--medical-blue); }
+
+.sidebar-nav a {
+    display: flex; align-items: center; color: #cbd5e1;
+    text-decoration: none; padding: 12px; margin-bottom: 5px;
+    border-radius: 12px; transition: 0.2s;
+}
+.sidebar-nav a i { min-width: 24px; margin-right: 15px; }
+.sidebar.collapsed .sidebar-nav a { justify-content: center; }
+.sidebar.collapsed .sidebar-nav a i { margin-right: 0; }
+
+.sidebar-nav a:hover, .sidebar-nav a.active {
+    background: #1e293b;
+    color: var(--medical-blue);
+}
+
+/* --- 3. MAIN CONTENT LAYOUT --- */
+.main-content {
+    margin-left: 310px;
+    transition: var(--transition);
+    padding: 40px;
+    width: 100%;
+}
+
+.main-content.expanded { margin-left: 110px; }
+
+.tool-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.tool-card {
+    background: var(--white);
+    width: 100%;
+    max-width: 500px;
+    padding: 35px;
+    border-radius: 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+/* --- 4. INPUTS --- */
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+
+.modern-input {
+    display: flex; align-items: center;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 0 15px;
+    transition: 0.3s;
+}
+
+.modern-input:focus-within {
+    border-color: var(--medical-blue);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+}
+
+.modern-input input {
+    height: 55px; border: none; background: transparent;
+    font-size: 1.2rem; font-weight: bold; width: 100%; outline: none;
+}
+
+.input-icon { color: var(--text-slate); margin-right: 10px; width: 20px; }
+.unit-badge { font-size: 0.75rem; font-weight: 800; color: var(--text-slate); background: #f1f5f9; padding: 4px 8px; border-radius: 8px; }
+
+/* --- 5. RESULT & GAUGE --- */
+.result-box {
+    margin-top: 30px; padding: 25px; border-radius: 24px;
+    background: #f8fafc; border: 1px solid #e2e8f0; text-align: center;
+    display: none;
+}
+
+#bmi-value { font-size: 3.5rem; margin: 10px 0; color: var(--sidebar-bg); letter-spacing: -2px; }
+
+.status-badge {
+    display: inline-block; padding: 8px 20px; border-radius: 50px;
+    font-weight: 800; font-size: 0.85rem; text-transform: uppercase;
+}
+
+.gauge-track {
+    height: 12px; border-radius: 10px; margin: 20px 0;
+    background: linear-gradient(to right, #f59e0b 0%, #10b981 30%, #10b981 50%, #f97316 75%, #ef4444 100%);
+    position: relative;
+}
+
+.gauge-pointer {
+    width: 4px; height: 20px; background: #0f172a;
+    position: absolute; top: -4px; left: 50%;
+    border-radius: 2px; transition: left 0.5s ease;
+}
+
+/* --- 6. BEAUTIFUL BUTTON STYLE --- */
+.button-area {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.btn-calc {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    color: white;
+    padding: 16px 32px;
+    width: 100%;
+    max-width: 320px;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 20px -5px rgba(2, 132, 199, 0.4);
+}
+
+.btn-calc:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 25px -5px rgba(2, 132, 199, 0.5);
+    filter: brightness(1.1);
+}
+
+.btn-calc:active {
+    transform: translateY(0);
+}
+
+.btn-calc i {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.btn-calc:hover i {
+    transform: rotate(15deg) scale(1.2);
+}
+
+/* --- 7. MOBILE OVERRIDES (IMPORTANT: MUST BE AT BOTTOM) --- */
+@media (max-width: 768px) {
+    .sidebar { left: -320px; }
+    .sidebar.active { left: 15px; width: calc(100% - 30px); }
+
+    .main-content { margin-left: 0; padding: 15px; padding-top: 80px; }
+
+    .calc-grid { grid-template-columns: 1fr; }
+
+    .tool-card { padding: 20px; }
+    #bmi-value { font-size: 2.8rem; }
+
+    /* Centered Mobile Button Adjustment */
+    .btn-calc {
+        padding: 20px;
+        font-size: 1.1rem;
+        max-width: 100%; /* Allows button to be wider on small screens */
+    }
+}
+
+/* Reference Table Styling */
+.reference-table { margin-top: 30px; border-top: 1px solid #f1f5f9; padding-top: 20px; }
+.ref-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.85rem; color: #64748b; }
+.active-green { color: #10b981; font-weight: bold; }
+/* Transitions for switching tools */
+.tool-card {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom dropdown style */
+select.modern-input {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+}
+/* --- BEAUTIFUL SEARCH BOX --- */
+.search-container {
+    padding: 0 10px; /* Spacing from sidebar edges */
+    margin-bottom: 20px;
+    transition: var(--transition);
+}
+
+.search-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05); /* Very subtle transparent white */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px 14px;
+    transition: all 0.3s ease;
+}
+
+/* Icon Styling */
+.search-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--text-slate);
+    transition: color 0.3s ease;
+    flex-shrink: 0;
+}
+
+/* Input Styling */
+.search-inner input {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 0.9rem;
+    margin-left: 10px;
+    width: 100%;
+    outline: none;
+}
+
+.search-inner input::placeholder {
+    color: #64748b;
+}
+
+/* Focus Effect (The Glow) */
+.search-inner:focus-within {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--medical-blue);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+}
+
+.search-inner:focus-within .search-icon {
+    color: var(--medical-blue);
+}
+
+/* Clear Button Styling */
+.search-clear {
+    width: 14px;
+    height: 14px;
+    color: #64748b;
+    cursor: pointer;
+    display: none; /* Hidden by default */
+}
+
+/* Handle Collapsed Sidebar Search */
+.sidebar.collapsed .search-container {
+    padding: 0;
+    justify-content: center;
+}
+
+.sidebar.collapsed .search-inner {
+    border: none;
+    background: transparent;
+    justify-content: center;
+}
+
+.sidebar.collapsed .search-inner input,
+.sidebar.collapsed .search-clear {
+    display: none;
+}

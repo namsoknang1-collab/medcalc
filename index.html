@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedCalc - Professional Medical Suite</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <aside class="sidebar" id="mainSidebar">
+        <div class="sidebar-header">
+            <div class="logo-area">
+                <i data-lucide="activity" class="logo-icon"></i>
+                <span class="logo-text">Med<span>Calc</span></span>
+            </div>
+            <button class="inner-toggle" onclick="toggleSidebar()">
+                <i data-lucide="chevron-left" id="toggleIcon"></i>
+            </button>
+        </div>
+
+        <div class="search-container">
+            <div class="search-inner">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" id="toolSearch" placeholder="Search tools..." onkeyup="filterTools()">
+                <i data-lucide="x" class="search-clear" onclick="clearSearch()"></i>
+            </div>
+          </div>
+        <nav class="sidebar-nav">
+            <p class="nav-label">General</p>
+            <a href="javascript:void(0)" onclick="showTool('bmi')" id="nav-bmi" class="active">
+                <i data-lucide="scale"></i> <span class="nav-text">BMI Calculator</span>
+            </a>
+
+            <p class="nav-label">Renal</p>
+            <a href="javascript:void(0)" onclick="showTool('gfr')" id="nav-gfr">
+                <i data-lucide="droplets"></i> <span class="nav-text">GFR (CKD-EPI)</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+
+        <section class="tool-container">
+
+            <div class="tool-card" id="tool-bmi">
+                <div class="card-header">
+                    <i data-lucide="scale" class="card-icon"></i>
+                    <div>
+                        <h2>BMI Calculator</h2>
+                        <p class="subtitle">Clinical Body Mass Index Assessment</p>
+                    </div>
+                </div>
+
+                <div class="calc-grid">
+                    <div class="input-group">
+                        <label>Body Weight</label>
+                        <div class="modern-input">
+                            <i data-lucide="weight" class="input-icon"></i>
+                            <input type="number" id="weight" placeholder="00.0">
+                            <span class="unit-badge">kg</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Total Height</label>
+                        <div class="modern-input">
+                            <i data-lucide="ruler" class="input-icon"></i>
+                            <input type="number" id="height" placeholder="000">
+                            <span class="unit-badge">cm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-area">
+                    <button onclick="calculateBMI()" class="btn-calc">
+                        <i data-lucide="calculator"></i>
+                        <span>Analyze Composition</span>
+                    </button>
+                </div>
+
+                <div id="result-container" class="result-box">
+                    <div class="result-header">
+                        <span class="result-label">Computed BMI</span>
+                        <h1 id="bmi-value">0.0</h1>
+                        <p id="bmi-category" class="status-badge">Normal</p>
+                    </div>
+
+                    <div class="gauge-container">
+                        <div class="gauge-track">
+                            <div id="gauge-pointer" class="gauge-pointer"></div>
+                        </div>
+                        <div class="gauge-labels">
+                            <span>18.5</span>
+                            <span>25</span>
+                            <span>30</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reference-table">
+                    <h4>WHO Classification</h4>
+                    <div class="ref-row"><span>Underweight</span> <span>&lt; 18.5</span></div>
+                    <div class="ref-row active-green"><span>Normal</span> <span>18.5 – 24.9</span></div>
+                    <div class="ref-row"><span>Overweight</span> <span>25.0 – 29.9</span></div>
+                    <div class="ref-row"><span>Obese</span> <span>&gt; 30.0</span></div>
+                </div>
+            </div>
+
+            <div class="tool-card" id="tool-gfr" style="display: none;">
+                <div class="card-header">
+                    <i data-lucide="droplets" class="card-icon" style="color: #6366f1;"></i>
+                    <div>
+                        <h2>GFR Calculator</h2>
+                        <p class="subtitle">CKD-EPI Equation (2021 Refit)</p>
+                    </div>
+                </div>
+
+                <div class="calc-grid">
+                    <div class="input-group">
+                        <label>Serum Creatinine</label>
+                        <div class="modern-input">
+                            <i data-lucide="test-tube" class="input-icon"></i>
+                            <input type="number" id="creatinine" placeholder="0.0">
+                            <span class="unit-badge">mg/dL</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Age</label>
+                        <div class="modern-input">
+                            <i data-lucide="calendar" class="input-icon"></i>
+                            <input type="number" id="age" placeholder="Years">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Biological Sex</label>
+                    <select id="sex" class="modern-input" style="width: 100%; border: 2px solid #e2e8f0; height: 55px; border-radius: 16px; padding: 0 15px; font-weight: bold;">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+
+                <div class="button-area">
+                    <button onclick="calculateGFR()" class="btn-calc" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
+                        <i data-lucide="activity"></i> Estimate GFR
+                    </button>
+                </div>
+
+                <div id="gfr-result-container" class="result-box">
+                    <span class="result-label">Estimated GFR</span>
+                    <h1 id="gfr-value">0</h1>
+                    <p>mL/min/1.73m²</p>
+                    <p id="gfr-stage" class="status-badge">Stage --</p>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
